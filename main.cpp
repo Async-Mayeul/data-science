@@ -112,11 +112,25 @@ int main()
     // Question 3 : générer la liste des identifiants amis pour chaque utilisateur
     vector<list<int> > listeAmis(nbUtilisateurs);
     
-    // TODO
-    
+    for(int i = 0; i < relations.size(); i++)
+    {
+        listeAmis[relations[i].first].push_back(relations[i].second);
+        listeAmis[relations[i].second].push_back(relations[i].first);
+    }
+
     // Question 4 : afficher la liste des identifiants amis de chaque utilisateur
     
-    // TODO
+    for(int i = 0; i < nbUtilisateurs; i++)
+    {
+        cout << "id=" << i << " : " << utilisateurs[i] << " -> ";
+
+        for (list<int>::const_iterator it = listeAmis[i].begin(); it != listeAmis[i].end(); ++it)
+        {
+            cout << *it << " ";
+        }
+
+        cout << endl;
+    }
     
     cout << endl;
     
