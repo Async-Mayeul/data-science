@@ -1,4 +1,4 @@
-#include <iostream> 
+#include <iostream>
 #include <vector>
 #include <list>
 #include <map>
@@ -82,7 +82,10 @@ int main()
     // Question 1 : afficher la liste des utilisateurs et leurs identifiants
     cout << "Utilisateurs : " << endl;
     
-    // TODO
+    for (int i = 0; i < nbUtilisateurs; i++)
+    {
+        cout << "id=" << i << " : " << utilisateurs[i] << endl;
+    }
     
     cout << endl;
     
