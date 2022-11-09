@@ -91,7 +91,7 @@ int main()
     
     // Question 2 : afficher le nombre d'utilisateurs
     
-    // TODO
+    cout << "Nb utilisateurs: " << nbUtilisateurs << endl;
     
     cout << endl;
     
