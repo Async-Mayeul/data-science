@@ -5,6 +5,8 @@
 #include <utility>
 #include <algorithm> // pour std::sort
 
+#define OFFSET_DE_UN    1
+
 using namespace std;
 
 bool trierAscendant(const pair<int,int> &p1, const pair<int,int> &p2) { return (p2.second < p1.second); }
@@ -133,30 +135,41 @@ int main()
     cout << endl;
     
     // Question 5 : calculer et afficher le nombre total d'amis pour chaque utilisateur
+    int somme = 0;
+    float moyenne;
     cout << "Nb total d'amis" << endl;
 
     for(int i = 0; i < nbUtilisateurs; i++)
     {
         cout << "id=" << i << " : " << utilisateurs[i] << " -> " << listeAmis[i].size() << endl;
+        somme += listeAmis[i].size();
     }
     
     cout << endl;
     
     // Question 6 : calculer et afficher le nombre moyen de connexions entre utilisateurs
-    
-    // TODO
-    
+    moyenne = (float)somme / nbUtilisateurs;
+
+    cout << "Nb moyens de connexions : " << moyenne << endl;
+
     cout << endl;
     
     // Question 7 : générer un vector contenant le nombre total d'amis pour chaque utilisateur
     vector<pair<int,int> > listeNbAmis(nbUtilisateurs);
-    
-    // TODO
+    for (int i = 0; i < nbUtilisateurs; i++)
+    {
+        listeNbAmis[i].first = i;
+        listeNbAmis[i].second = listeAmis[i].size();
+    }
     
     // Question 8 : trier ce vector et afficher les utilisateur ayant le plus d'amis
-    
-    // TODO
-    
+    sort(listeNbAmis.begin(), listeNbAmis.end(), trierAscendant);
+
+    for (int i = 0; i < nbUtilisateurs; i++)
+    {
+        cout << "id=" << listeNbAmis[i].first << " : " << utilisateurs[listeNbAmis[i].first] << " -> " << listeNbAmis[i].second << endl;
+    }
+
     cout << endl;
     
     // Question 9 : afficher les amis des amis d'un utilisateur
