@@ -90,7 +90,6 @@ int main()
     cout << endl;
     
     // Question 2 : afficher le nombre d'utilisateurs
-    
     cout << "Nb utilisateurs: " << nbUtilisateurs << endl;
     
     cout << endl;
@@ -119,7 +118,6 @@ int main()
     }
 
     // Question 4 : afficher la liste des identifiants amis de chaque utilisateur
-    
     for(int i = 0; i < nbUtilisateurs; i++)
     {
         cout << "id=" << i << " : " << utilisateurs[i] << " -> ";
@@ -135,8 +133,12 @@ int main()
     cout << endl;
     
     // Question 5 : calculer et afficher le nombre total d'amis pour chaque utilisateur
-    
-    // TODO
+    cout << "Nb total d'amis" << endl;
+
+    for(int i = 0; i < nbUtilisateurs; i++)
+    {
+        cout << "id=" << i << " : " << utilisateurs[i] << " -> " << listeAmis[i].size() << endl;
+    }
     
     cout << endl;
     
