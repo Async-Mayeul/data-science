@@ -11,15 +11,36 @@ using namespace std;
 
 bool trierAscendant(const pair<int,int> &p1, const pair<int,int> &p2) { return (p2.second < p1.second); }
 
-void afficherAmisDesAmisv1(int id, const vector<list<int> > &amis)
+void afficherAmisDesAmisv1(int id, const vector<list<int> > &amis, const vector<string> &utilisateurs)
 {
-    
+    cout << "Les amis des amis de id=" << id << " : " << utilisateurs[id] << " -> ";
+
+    for (list<int>::const_iterator it = amis[id].begin(); it != amis[id].end(); ++it)
+    {
+        for (list<int>::const_iterator jt = amis[*it].begin(); jt != amis[*it].end(); ++jt)
+        {
+            cout << " " << *jt;
+        }
+    }
+
     cout << endl;
 }
 
-void afficherAmisDesAmisv2(int id, const vector<list<int> > &amis)
+void afficherAmisDesAmisv2(int id, const vector<list<int> > &amis, const vector<string> &utilisateurs)
 {
-    
+    cout << "Les amis des amis de id=" << id << " : " << utilisateurs[id] << " -> ";
+
+    for (list<int>::const_iterator it = amis[id].begin(); it != amis[id].end(); ++it)
+    {
+        for (list<int>::const_iterator jt = amis[*it].begin(); jt != amis[*it].end(); ++jt)
+        {
+            if (*jt != id)
+            {
+                cout << " " << *jt;
+            }
+        }
+    }
+
     cout << endl;
 }
 
@@ -33,18 +54,60 @@ bool estAmi(int id, const list<int> &a)
     return false;
 }
 
-void afficherAmisDesAmisv3(int id, const vector<list<int> > &amis)
+void afficherAmisDesAmisv3(int id, const vector<list<int> > &amis, const vector<string> &utilisateurs)
 {
-    
+    cout << "Les amis des amis de id=" << id << " : " << utilisateurs[id] << " -> ";
+
+    for (list<int>::const_iterator it = amis[id].begin(); it != amis[id].end(); ++it)
+    {
+        for (list<int>::const_iterator jt = amis[*it].begin(); jt != amis[*it].end(); ++jt)
+        {
+            if (*jt != id && !estAmi(*jt, amis[id]))
+            {
+                cout << " " << *jt;
+            }
+        }
+
+    }
     cout << endl;
+}
+
+void amisEnCommuns(int id, const vector<list<int> > &amis, map<int,int> &communs)
+{
+    int cpt = 0;
+
+    for (int i = 0; i < amis.size(); i++)
+    {
+        cpt = 0;
+        if (i != id)
+        {
+            for (list<int>::const_iterator it = amis[i].begin(); it != amis[i].end(); ++it)
+            {
+                if (estAmi(*it, amis[id]) && !estAmi(i, amis[id]))
+                {
+                    cpt++;
+                }
+            }
+        }
+
+        if (cpt != 0)
+        {
+            communs[i] = cpt;
+        }
+    }
 }
 
 void afficherAmisInterets(string interet, const list<pair<int,string> > &interets)
 {
     cout << "Utilisateur(s) partageant un intérêt pour \"" << interet << "\" : " << endl;
     
-    // TODO
-    
+    for (list<pair<int,string> >::const_iterator it = interets.begin(); it != interets.end(); ++it)
+    {
+        if (it->second == interet)
+        {
+            cout << " " << it->first;
+        }
+    }
     cout << endl;
 }
 
@@ -52,16 +115,72 @@ void afficherInteretsUtilisateurs(const map<string,list<int> > &interetsUtilisat
 {
     cout << "Liste des utilisateurs pour chaque intérêt : " << endl;
     
-    // TODO
-    
+    for (map<string,list<int> >::const_iterator it = interetsUtilisateurs.begin(); it != interetsUtilisateurs.end(); ++it)
+    {
+        cout << it->first << " : ";
+
+        for (list<int>::const_iterator jt = it->second.begin(); jt != it->second.end(); ++jt)
+        {
+            cout << *jt << " ";
+        }
+
+        cout << endl;
+    }
 }
 
 void afficherUtilisateursInterets(const map<int,list<string> > &utilisateursInterets)
 {
     cout << "Liste d'intérêts pour chaque utilisateur : " << endl;
     
-    // TODO
-    
+    for (map<int,list<string> >::const_iterator it = utilisateursInterets.begin(); it != utilisateursInterets.end(); ++it)
+    {
+        cout << it->first << " : ";
+
+        for (list<string>::const_iterator jt = it->second.begin(); jt != it->second.end(); ++jt)
+        {
+            cout << *jt << " ";
+        }
+
+        cout << endl;
+    }
+}
+
+void afficherInteretsCommuns(int id, const list<string> &listeInterets, const list<pair<int,string> > &interets)
+{
+    for (list<string>::const_iterator it = listeInterets.begin(); it != listeInterets.end(); ++it)
+    {
+        cout << *it << " : ";
+        for (list<pair<int,string> >::const_iterator jt = interets.begin(); jt != interets.end(); ++jt)
+        {
+            if (*it == jt->second && jt->first != id)
+            {
+                cout << jt->first << " ";
+            }
+        }
+
+        cout << endl;
+    }
+}
+
+void afficherPlusInteretsCommuns(int id, const list<string> &listeInterets, const list<pair<int,string> > &interets, const vector<string> &utilisateurs)
+{
+    vector<map<int,int> > nbInteretsCommuns;
+
+    for(list<string>::const_iterator it = listeInterets.begin(); it != listeInterets.end(); ++it)
+    {
+        for (list<pair<int,string> >::const_iterator jt = interets.begin(); jt != interets.end(); ++jt)
+        {
+            if (*it == jt->second && jt->first != id)
+            {
+                nbInteretsCommuns[jt->first][jt->first] += 1;
+            }
+        }
+    }
+
+    for (int i = 0; i < nbInteretsCommuns.size(); i++)
+    {
+        cout << nbInteretsCommuns[i][i] << endl;
+    }
 }
 
 int main()
@@ -173,33 +292,27 @@ int main()
     cout << endl;
     
     // Question 9 : afficher les amis des amis d'un utilisateur
-    
-    // TODO
-        
-    afficherAmisDesAmisv1(0, listeAmis);
+    afficherAmisDesAmisv1(0, listeAmis, utilisateurs);
     
     // Question 10 : afficher les amis des amis d'un utilisateur sans que l'utilisateur apparaisse dans la liste
-    
-    // TODO
-    
-    afficherAmisDesAmisv2(0, listeAmis);
+    afficherAmisDesAmisv2(0, listeAmis, utilisateurs);
     
     // Question 11 : afficher les amis des amis d'un utilisateur en excluant les personnes déjà connues de l'utilisateur
-    
-    // TODO
-    
-    afficherAmisDesAmisv3(0, listeAmis);
-    
-    // TODO
-    
-    afficherAmisDesAmisv3(3, listeAmis);
+    afficherAmisDesAmisv3(0, listeAmis, utilisateurs);
+    afficherAmisDesAmisv3(3, listeAmis, utilisateurs);
+
     cout << endl;
     
     // Question 12 : générer une liste d'amis communs et l'afficher
     map<int,int> amisCommuns;
     
-    // TODO
-    
+    amisEnCommuns(3, listeAmis, amisCommuns);
+
+    for (map<int,int>::const_iterator it = amisCommuns.begin(); it != amisCommuns.end(); ++it)
+    {
+        cout << "id=" << it->first << " : " << utilisateurs[it->first] << " -> " << it->second << endl;
+    }
+
     cout << endl;
     
     list<pair<int,string> > interets;
@@ -246,7 +359,10 @@ int main()
     // Question 14 : générer une liste d'index d'utilisateurs pour chaque intérêt
     map<string,list<int> > interetsUtilisateurs;
     
-    // TODO
+    for (list<pair<int,string> >::const_iterator it = interets.begin(); it != interets.end(); ++it)
+    {
+        interetsUtilisateurs[it->second].push_back(it->first);
+    }
     
     // Question 15 : afficher cette liste
     afficherInteretsUtilisateurs(interetsUtilisateurs);
@@ -255,21 +371,33 @@ int main()
     // Question 16 : générer une liste d'intérêts pour chaque utilisateur
     map<int,list<string> > utilisateursInterets;
     
-    // TODO
-    
+    for (list<pair<int,string> >::const_iterator it = interets.begin(); it !=interets.end(); ++it)
+    {
+        utilisateursInterets[it->first].push_back(it->second);
+    }
+
     // Question 17 : afficher cette liste
     afficherUtilisateursInterets(utilisateursInterets);
     cout << endl;
     
     // Question 18 : afficher les utilisateurs partageant les intérêts d'un utilisateur
+    int id;
+
+    cout << "Entrez l'id de l'utilisateurs: ";
+    cin >> id;
     
-    // TODO
+    cout << "Centre d'intérêts communs : id=" << id << " : " << utilisateurs[id] << endl;
+
+    afficherInteretsCommuns(id, utilisateursInterets[id], interets);
     
     cout << endl;
     
     // Question 19 : afficher les utilisateurs ayant le plus d'intérêts communs avec un utilisateur
-    
-    // TODO
-    
+    cout << "Utilisateurs ayant le plus d'intérêts en commun : id=" << id << " : " << utilisateurs[id] << endl;
+
+    afficherPlusInteretsCommuns(id, utilisateursInterets[id], interets, utilisateurs);
+
+    cout << endl;
+
     return 0;
 }
